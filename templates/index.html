@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌾 Crop Recommendation System</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body class="bg-green-50 flex flex-col items-center justify-center min-h-screen">
+  <div class="bg-white shadow-xl rounded-2xl p-8 w-96">
+    <h1 class="text-2xl font-bold text-center text-green-700 mb-4">
+      🌱 Crop Recommendation
+    </h1>
+    <form id="cropForm" class="flex flex-col gap-3">
+      <input class="border rounded p-2" placeholder="State" id="state" required />
+      <input class="border rounded p-2" placeholder="District" id="district" required />
+      <input class="border rounded p-2" type="number" placeholder="Nitrogen (N)" id="N" required />
+      <input class="border rounded p-2" type="number" placeholder="Phosphorus (P)" id="P" required />
+      <input class="border rounded p-2" type="number" placeholder="Potassium (K)" id="K" required />
+      <input class="border rounded p-2" type="number" step="0.1" placeholder="pH" id="pH" required />
+      <button type="submit" class="bg-green-600 hover:bg-green-700 text-white rounded p-2 mt-2">
+        Get Recommendation
+      </button>
+    </form>
+
+    <div id="result" class="mt-4 text-center text-lg font-semibold text-green-800"></div>
+  </div>
+
+  <script>
+    document.getElementById("cropForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = {
+        state: document.getElementById("state").value,
+        district: document.getElementById("district").value,
+        N: parseFloat(document.getElementById("N").value),
+        P: parseFloat(document.getElementById("P").value),
+        K: parseFloat(document.getElementById("K").value),
+        pH: parseFloat(document.getElementById("pH").value),
+      };
+
+      const res = await fetch("/predict_with_gpt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+      document.getElementById("result").textContent =
+        "🌾 Recommended Crop: " + result.recommended_crop;
+    });
+  </script>
+</body>
+</html>
