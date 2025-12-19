@@ -115,7 +115,7 @@ Example:
 GROQ_API_KEY=your_api_key_here
 ```
 
-> ⚠️ Never commit API keys directly to GitHub.
+
 
 ---
 
